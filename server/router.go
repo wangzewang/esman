@@ -23,11 +23,6 @@ func NewRouter() *gin.Engine {
 			logGroup.GET("/all/:task", log.All)
 			logGroup.GET("/sse/:task", log.Stream)
 		}
-		initGroup := v1.Group("hello")
-		{
-			hello := new(controllers.HelloController)
-			initGroup.GET("/hello", hello.Hello)
-		}
 	}
 	return router
 

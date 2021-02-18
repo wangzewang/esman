@@ -5,41 +5,47 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"github.com/stretchr/testify/suite"
 
 	"github.com/wangzewang/esman/config"
 	"github.com/wangzewang/esman/controllers"
 )
 
-func Test(t *testing.T) { Testing(t) }
-
-var _ = Suite(&initSuite{})
-
-type initSuite struct {
+type LogSuite struct {
+	suite.Suite
 	config *viper.Viper
 	router *gin.Engine
-}
-
-func (s *initSuite) SetUpTest(c *C) {
-	config.Init("test")
-	s.config = config.GetConfig()
-	s.router = SetupRouter()
 }
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	gin.SetMode(gin.TestMode)
 	health := new(controllers.HealthController)
+
+	router.GET("/health", health.Status)
+
 	v1 := router.Group("v1")
 	{
-		initGroup := v1.Group("hello")
+		logGroup := v1.Group("logs")
 		{
-			hello := new(controllers.HelloController)
-			initGroup.GET("/hello", hello.Hello)
+			log := new(controllers.LogController)
+			logGroup.GET("/all/:task", log.All)
+			logGroup.GET("/sse/:task", log.Stream)
 		}
 	}
 	return router
 }
+func (s *LogSuite) SetupTest() {
+	config.Init("test")
+	s.config = config.GetConfig()
+	s.router = SetupRouter()
 
-func TestMain(m *testing.M) {
+}
+
+func (s *LogSuite) TestMain() {
 	SetupRouter()
+}
+
+func LogTestSuite(t *testing.T) {
+	suite.Run(t, new(LogSuite))
 }
