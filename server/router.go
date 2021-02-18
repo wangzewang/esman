@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"github.com/wangzewang/esman/controllers"
 )
 
@@ -16,6 +17,12 @@ func NewRouter() *gin.Engine {
 
 	v1 := router.Group("v1")
 	{
+		logGroup := v1.Group("logs")
+		{
+			log := new(controllers.LogController)
+			logGroup.GET("/all/:task", log.All)
+			logGroup.GET("/sse/:task", log.Stream)
+		}
 		initGroup := v1.Group("hello")
 		{
 			hello := new(controllers.HelloController)

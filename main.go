@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/wangzewang/esman/config"
+	"github.com/wangzewang/esman/es"
 	"github.com/wangzewang/esman/server"
 )
 
@@ -17,5 +18,7 @@ func main() {
 	}
 	flag.Parse()
 	config.Init(*environment)
+	es.Init()
 	server.Init()
+
 }

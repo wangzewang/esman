@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+es:
+  host: http://127.0.0.1:9200
+  index: ""
+  username: ""
+  password: ""
+  shards: ""
+  replicas: ""
+  sniff: false
+  healthCheck: true
+  infoLog: ""
+  errorLog: ""
+  traceLog: ""

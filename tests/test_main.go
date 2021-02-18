@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+
 	"github.com/wangzewang/esman/config"
 	"github.com/wangzewang/esman/controllers"
 )
