@@ -54,8 +54,6 @@ func Init() {
 
 func NewEsStreamQuery(taskName string, stop *int64, resp chan<- string) {
 
-	//task.Status = &Running
-
 queryLoop:
 	for {
 		//startTimestamp := time.Now().AddDate(-1, 0, 0).UnixNano() / 1e6
@@ -64,7 +62,7 @@ queryLoop:
 		//bQ := elastic.NewMatchQuery("kubernetes_namespace.keyword", "kube-system")
 		bQ := elastic.NewMatchAllQuery()
 		numLine := 10000
-		res, err := Client.Search().Index("logstash-2021.02.02").Query(bQ).Size(numLine).SortBy(elastic.NewFieldSort("@timestamp").Asc()).Do(context.Background())
+		res, err := Client.Search().Index("logstash-*").Query(bQ).Size(numLine).SortBy(elastic.NewFieldSort("@timestamp").Asc()).Do(context.Background())
 		if err != nil {
 			panic(err)
 		}
@@ -105,7 +103,7 @@ func NewEsQuery(taskName string) []string {
 	//bQ := elastic.NewMatchQuery("kubernetes_namespace.keyword", "kube-system")
 	bQ := elastic.NewMatchAllQuery()
 	numLine := 10000
-	searchRes, err := Client.Search().Index("logstash-2021.02.02").Query(bQ).Size(numLine).SortBy(elastic.NewFieldSort("@timestamp").Asc()).Do(context.Background())
+	searchRes, err := Client.Search().Index("logstash-*").Query(bQ).Size(numLine).SortBy(elastic.NewFieldSort("@timestamp").Asc()).Do(context.Background())
 	if err != nil {
 		panic(err)
 	}
@@ -131,6 +129,7 @@ func NewEsQuery(taskName string) []string {
 
 	return res
 }
+
 func EachTime(r *elastic.SearchResult, typ reflect.Type) []interface{} {
 	if r.Hits == nil || r.Hits.Hits == nil || len(r.Hits.Hits) == 0 {
 		return nil

@@ -20,5 +20,4 @@ func main() {
 	config.Init(*environment)
 	es.Init()
 	server.Init()
-
 }
